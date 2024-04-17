@@ -1,13 +1,13 @@
 resource "aws_eks_cluster" "tech" {
-  name = "tech"
+  name     = "tech"
   role_arn = var.labRole
 
   vpc_config {
-    subnet_ids = ["${var.subnetA}", "${var.subnetB}", "${var.subnetC}"]
+    subnet_ids         = ["${var.subnetA}", "${var.subnetB}", "${var.subnetC}"]
     security_group_ids = ["${var.sgId}"]
   }
 
-  access_config{
-    authentication_mode = var.accessConfig    
+  access_config {
+    authentication_mode = var.accessConfig
   }
 }

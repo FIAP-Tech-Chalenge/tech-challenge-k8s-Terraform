@@ -1,14 +1,14 @@
-resource "aws_eks_node_group" "node" {
-  cluster_name    = aws_eks_cluster.tech.name
-  node_group_name = var.nodeName
+resource "aws_eks_node_group" "node-group" {
+  cluster_name    = aws_eks_cluster.eks-cluster.name
+  node_group_name = "NG-${var.projectName}"
   node_role_arn   = var.labRole
   subnet_ids      = ["${var.subnetA}", "${var.subnetB}", "${var.subnetC}"]
   disk_size       = 50
-  instance_types  = ["t3.micro"]
+  instance_types  = [var.instanceType]
 
   scaling_config {
     desired_size = 1
-    max_size     = 3
+    max_size     = 2
     min_size     = 1
   }
 

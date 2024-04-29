@@ -3,15 +3,15 @@ app:
   replicaCount: 3
   image:
     repository: wolwer/app-tech
-    tag: latest
     pullPolicy: IfNotPresent
   service:
+    name: app-tech-service
     type: NodePort
     port: 8080
     targetPort: 8080
     nodePort: 30000
   database:
-    url: jdbc:postgresql://postgres:5432/mydatabase
+    url: jdbc:postgresql://monorail.proxy.rlwy.net:54078/railway
     username:
       secretKeyRef:
         name: my-secret
@@ -27,12 +27,14 @@ app:
   autoscaling:
     minReplicas: 1
     maxReplicas: 10
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 90
   ingress:
+    name: app-tech-ingress
     enabled: true
+    host: alb-tech-223571255.us-east-1.elb.amazonaws.com
     annotations: {}
     hosts:
-      - host: localhost
+      - host: alb-tech-223571255.us-east-1.elb.amazonaws.com
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -55,26 +57,3 @@ hpa:
   minReplicas: 1
   maxReplicas: 10
   targetCPUUtilizationPercentage: 90
-postgres:
-  name: postgres
-  replicaCount: 1
-  image:
-    repository: postgres
-    tag: latest
-  env:
-    user:
-      secretKeyRef:
-        name: my-secret
-        key: DATA_USERNAME
-    password:
-      secretKeyRef:
-        name: my-secret
-        key: DATA_PASSWORD
-    db:
-      configMapKeyRef:
-        name: my-configmap
-        key: DATA_DATABASE
-  service:
-    port: 5432
-  pvc:
-    name: postgres-pvc

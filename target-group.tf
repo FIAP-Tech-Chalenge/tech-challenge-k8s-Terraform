@@ -7,7 +7,7 @@ resource "aws_lb_target_group" "tg" {
   vpc_id = var.vpcId
 
   health_check {
-    path    = "/health"
+    path    = "/actuator/health"
     port    = 30000
     matcher = "200"
   }

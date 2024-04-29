@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-tech
+  labels:
+    app: app-tech
 spec:
   replicas: 3
   selector:
@@ -14,10 +16,15 @@ spec:
     spec:
       containers:
         - name: app-tech
-          image: wolwer/app-tech:latest
+          image: wolwer/app-tech
           ports:
             - containerPort: 8080
           env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: POSTGRES_USER
             - name: DATA_HOST
               valueFrom:
                 configMapKeyRef:
@@ -43,6 +50,8 @@ spec:
                 configMapKeyRef:
                   name: my-configmap
                   key: DATA_DATABASE
+            - name: DATA_URL
+              value: jdbc:postgresql://monorail.proxy.rlwy.net:54078/railway
           resources:
             requests:
               cpu: "100m"

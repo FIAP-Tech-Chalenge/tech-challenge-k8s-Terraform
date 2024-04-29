@@ -2,7 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: my-configmap
+  labels:
+    app: app-tech
 data:
-  DATA_HOST: "postgres"
-  DATA_PORT: "5432"
-  DATA_DATABASE: "mydatabase"
+  DATA_HOST: "monorail.proxy.rlwy.net"
+  DATA_PORT: "54078"
+  DATA_DATABASE: "railway"

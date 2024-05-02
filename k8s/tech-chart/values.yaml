@@ -11,7 +11,7 @@ app:
     targetPort: 8080
     nodePort: 30000
   database:
-    url: jdbc:postgresql://monorail.proxy.rlwy.net:54078/railway
+    url: jdbc:postgresql://tech-challenge.c76hqbfcui3h.us-east-1.rds.amazonaws.com:5432/techchallenge
     username:
       secretKeyRef:
         name: my-secret
@@ -31,10 +31,10 @@ app:
   ingress:
     name: app-tech-ingress
     enabled: true
-    host: alb-tech-223571255.us-east-1.elb.amazonaws.com
+    host: localhost
     annotations: {}
     hosts:
-      - host: alb-tech-223571255.us-east-1.elb.amazonaws.com
+      - host: localhost
         paths:
           - path: /
             pathType: ImplementationSpecific

@@ -51,7 +51,7 @@ spec:
                   name: my-configmap
                   key: DATA_DATABASE
             - name: DATA_URL
-              value: jdbc:postgresql://monorail.proxy.rlwy.net:54078/railway
+              value: jdbc:postgresql://tech-challenge.c76hqbfcui3h.us-east-1.rds.amazonaws.com:5432/techchallenge
           resources:
             requests:
               cpu: "100m"

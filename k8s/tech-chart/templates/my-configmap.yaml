@@ -5,6 +5,6 @@ metadata:
   labels:
     app: app-tech
 data:
-  DATA_HOST: "monorail.proxy.rlwy.net"
-  DATA_PORT: "54078"
-  DATA_DATABASE: "railway"
+  DATA_HOST: "tech-challenge.c76hqbfcui3h.us-east-1.rds.amazonaws.com"
+  DATA_PORT: "5432"
+  DATA_DATABASE: "techchallenge"

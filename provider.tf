@@ -1,4 +1,4 @@
 provider "aws" {
-  profile = "default"
+  profile = "lab"
   region  = var.regionDefault
 }

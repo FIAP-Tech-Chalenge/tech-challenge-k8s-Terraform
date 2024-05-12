@@ -11,7 +11,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    outputs:
+      target_group_arn: ${{ steps.tg_arn.outputs.target_group_arn }}
     
     steps:
       - name: Checkout code
@@ -43,4 +44,10 @@ jobs:
 
       - name: Terraform Apply EKS and Security Group
         run: terraform apply -auto-approve 
+        working-directory: eks
+        id: apply
+
+      - name: Output Target Group ARN
+        id: tg_arn
+        run: echo "::set-output name=target_group_arn::$(terraform output -raw target_group_arn)"
         working-directory: eks

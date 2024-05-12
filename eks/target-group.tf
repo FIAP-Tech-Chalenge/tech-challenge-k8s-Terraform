@@ -12,10 +12,8 @@ resource "aws_lb_target_group" "tg" {
     matcher = "200"
   }
 }
-output "target_group_arn" {
+
+output "tg_arn" {
   value = aws_lb_target_group.tg.arn
+  description = "The ARN of the target group"
 }
-
-
-
-

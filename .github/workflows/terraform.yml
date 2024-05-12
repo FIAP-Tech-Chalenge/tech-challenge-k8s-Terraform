@@ -12,7 +12,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -24,12 +24,9 @@ jobs:
 
       - name: Set up AWS environment variables from secrets
         run: |
-          mkdir -p ~/.aws
-          echo "[lab]" >> ~/.aws/credentials
-          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
-          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
-          echo "[profile lab]" >> ~/.aws/config
-          echo "region = ${{ secrets.AWS_REGION }}" >> ~/.aws/config
+          echo "TF_VAR_aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_regionDefault=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
 
       - name: Terraform Init
         run: terraform init -input=false
@@ -47,4 +44,3 @@ jobs:
       - name: Terraform Apply Load Balancer Attachment
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -target=aws_lb_target_group_attachment.attach -target=aws_instance.ec2
-

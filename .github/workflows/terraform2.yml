@@ -1,0 +1,39 @@
+name: Criar Load Balancer
+
+on:
+  workflow_run:
+    workflows: ["Deploy to EKS"]
+    types:
+      - completed
+
+jobs:
+  post-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: '1.0.0'
+
+      - name: Set up AWS environment variables from secrets
+        run: |
+          echo "TF_VAR_aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_aws_session_token=${{ secrets.AWS_SESSION_TOKEN }}" >> $GITHUB_ENV
+          echo "TF_VAR_regionDefault=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -input=false
+        
+      - name: Terraform Apply Load Balancer Attachment
+        run: terraform apply -auto-approve -target=aws_lb_target_group_attachment.attach -target=aws_instance.ec2

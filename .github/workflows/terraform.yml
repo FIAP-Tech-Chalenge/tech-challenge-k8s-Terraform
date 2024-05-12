@@ -25,7 +25,8 @@ jobs:
       - name: Set up AWS environment variables from secrets
         run: |
           echo "TF_VAR_aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
-          echo "TF_VAR_aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV\
+          echo "TF_VAR_aws_session_token=${{ secrets.AWS_SESSION_TOKEN }}" >> $GITHUB_ENV
           echo "TF_VAR_regionDefault=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
 
       - name: Terraform Init

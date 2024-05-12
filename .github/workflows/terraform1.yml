@@ -40,6 +40,3 @@ jobs:
 
       - name: Terraform Apply EKS and Security Group
         run: terraform apply -auto-approve -target=aws_alb.alb -target=aws_lb_listener.listener -target=aws_eks_access_entry.access-entry -target=aws_eks_access_policy_association.eks-policy -target=aws_eks_cluster.eks-cluster -target=aws_eks_node_group.node-group -target=aws_security_group.sg -target=aws_lb_target_group.tg
-
-      - name: Terraform Apply Load Balancer Attachment
-        run: terraform apply -auto-approve -target=aws_lb_target_group_attachment.attach -target=aws_instance.ec2

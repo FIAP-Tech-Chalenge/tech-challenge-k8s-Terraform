@@ -1,10 +1,10 @@
-name: Criar Load Balancer
+name: Post-Deployment Tasks
 
 on:
   workflow_run:
     workflows: ["Deploy to EKS"]
-    types:
-      - completed
+    types: [completed]
+    branches: [main]
 
 jobs:
   post-deploy:

@@ -42,5 +42,5 @@ jobs:
         working-directory: eks
 
       - name: Terraform Apply EKS and Security Group
-        run: terraform apply -auto-approve -target=aws_eks_access_entry.access-entry -target=aws_eks_access_policy_association.eks-policy -target=aws_eks_cluster.eks-cluster -target=aws_eks_node_group.node-group -target=aws_security_group.sg -target=aws_lb_target_group.tg
+        run: terraform apply -auto-approve 
         working-directory: eks

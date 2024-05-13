@@ -49,7 +49,7 @@ jobs:
 
       - name: Output Target Group ARN
         id: tg_arn
-        run: echo "::set-output name=target_group_arn::$(terraform output -raw target_group_arn)"
+        run: echo "target_group_arn=$(terraform output -raw target_group_arn)" >> $GITHUB_ENV
         working-directory: eks
 
   post-deploy:
@@ -90,5 +90,4 @@ jobs:
 
       - name: Get Target Group ARN from previous workflow
         run: |
-          TG_ARN=${{ needs.deploy.outputs.target_group_arn }}
-          echo "TARGET_GROUP_ARN=$TG_ARN" >> $GITHUB_ENV
+          echo "TF_VAR_tg_arn=${{ needs.deploy.outputs.target_group_arn }}" >> $GITHUB_ENV

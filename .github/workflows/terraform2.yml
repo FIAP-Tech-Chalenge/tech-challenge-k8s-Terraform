@@ -1,19 +1,15 @@
-name: Deploy and Post-Deployment Tasks
+name: Post-Deployment Tasks
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Deploy to EKS"]
+    types: [completed]
+    branches: [main]
 
 jobs:
-  deploy:
+  post-deploy:
     runs-on: ubuntu-latest
-    outputs:
-      target_group_arn: ${{ steps.tg_arn.outputs.target_group_arn }}
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,22 +28,21 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -input=false
-        working-directory: eks
+        working-directory: lb
 
       - name: Terraform Validate
         run: terraform validate
-        working-directory: eks
+        working-directory: lb
 
       - name: Terraform Plan
         run: terraform plan -input=false
-        working-directory: eks
-
-      - name: Terraform Apply EKS and Security Group
+        working-directory: lb
+        
+      - name: Terraform Apply Load Balancer Attachment
         run: terraform apply -auto-approve
-        working-directory: eks
-        id: apply
-
-      - name: Output Target Group ARN
-        id: tg_arn
-        run: echo "target_group_arn=$(terraform output -raw target_group_arn)" >> $GITHUB_ENV
-        working-directory: eks
+        working-directory: lb
+      
+      - name: Get Target Group ARN from previous workflow
+        run: |
+          TG_ARN=${{ needs.deploy.outputs.target_group_arn }}
+          echo "TARGET_GROUP_ARN=$TG_ARN" >> $GITHUB_ENV

@@ -1,6 +1,3 @@
 data "aws_instance" "ec2" {
-  filter {
-    name   = "tag:eks:nodegroup-name"
-    values = ["NG-tech"]
-  }
+  instance_id = "i-099ea10b3dffbf502"
 }

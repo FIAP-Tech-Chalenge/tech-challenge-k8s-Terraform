@@ -1,10 +1,12 @@
 name: Post-Deployment Tasks
 
 on:
-  workflow_run:
-    workflows: ["Deploy to EKS"]
-    #types: [completed]
-    branches: [main]
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   post-deploy:

@@ -1,18 +1,12 @@
-name: Manual Terraform Destroy
+name: Terraform Destroy
 
 on:
   workflow_dispatch:
-    inputs:
-      confirm:
-        type: boolean
-        description: 'Confirm destroy? Must be true to proceed.'
-        required: true
-        default: false
 
 jobs:
   destroy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.confirm == true }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,28 +16,17 @@ jobs:
         with:
           terraform_version: '1.0.0'
 
-      - name: Initialize Terraform in EKS
+      - name: Set up AWS environment variables from secrets
+        run: |
+          echo "TF_VAR_aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_aws_session_token=${{ secrets.AWS_SESSION_TOKEN }}" >> $GITHUB_ENV
+          echo "TF_VAR_regionDefault=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
+
+      - name: Terraform Init
         run: terraform init
-        working-directory: EKS
+        working-directory: .
 
-      - name: Terraform Destroy in EKS
+      - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: EKS
-        env:
-          TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
-          TF_VAR_regionDefault: ${{ secrets.AWS_REGION }}
-
-      - name: Initialize Terraform in lb
-        run: terraform init
-        working-directory: lb
-
-      - name: Terraform Destroy in lb
-        run: terraform destroy -auto-approve
-        working-directory: lb
-        env:
-          TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
-          TF_VAR_regionDefault: ${{ secrets.AWS_REGION }}
+        working-directory: .

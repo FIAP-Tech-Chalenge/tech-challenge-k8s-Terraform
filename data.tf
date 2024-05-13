@@ -1,6 +1,5 @@
 data "aws_instance" "ec2" {
     depends_on = [
-        aws_lb_target_group.tg,
         aws_eks_cluster.eks-cluster,
         aws_eks_node_group.node-group,
         aws_alb.alb,

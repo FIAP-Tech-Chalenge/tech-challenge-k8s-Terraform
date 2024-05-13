@@ -16,7 +16,6 @@ resource "aws_lb_target_group" "tg" {
 resource "aws_lb_target_group_attachment" "attach" {
   depends_on = [
     aws_lb_target_group.tg,
-    data.aws_instance.ec2,
     aws_eks_cluster.eks-cluster,
     aws_eks_node_group.node-group,
     aws_alb.alb,
